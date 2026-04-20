@@ -1,71 +1,127 @@
-# push-tags README
+# 🎵 Push Tags — VS Code Extension
 
-This is the README for your extension "push-tags". After writing up a brief description, we recommend including the following sections.
+Push Tags is a lightweight VS Code extension that plays custom producer tags or sound effects when you push your Git actions inside the integrated terminal.
 
-## Features
+*Alert everyone you know that you have pushed code with creative flair*
+---
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+## 🚀 Features
 
-For example if there is an image subfolder under your extension project workspace:
-
-\!\[feature X\]\(images/feature-x.png\)
-
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
-
-## Requirements
-
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
-
-## Extension Settings
-
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
-
-This extension contributes the following settings:
-
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
-
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
+* 🔊 Play sound when you run `git push` in the VS Code terminal
+* 🎵 Choose from built-in sounds
+* 📁 Upload custom audio files (`.mp3`, `.wav`, `.m4a`)
+* 🚫 Disable sounds anytime
+* ⚡ Lightweight and runs locally inside VS Code
 
 ---
 
-## Following extension guidelines
+## 📦 Installation
 
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
+### Option 1: Install from VSIX
 
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
+1. Download the `.vsix` file
+2. Open VS Code
+3. Press `Cmd/Ctrl + Shift + P`
+4. Run: **Extensions: Install from VSIX**
+5. Select the file
 
-## Working with Markdown
+---
 
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
+## 🎮 How to Use
 
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
+### 1. Open Command Palette
 
-## For more information
+```
+Cmd/Ctrl + Shift + P
+```
 
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
+### 2. Run:
 
-**Enjoy!**
+```
+Push Tags: Select Sound
+```
+
+### 3. Choose one:
+
+* 🎵 Built-in sound
+* 🔉 Custom uploaded sound
+* 📁 Open sound folder
+* 🚫 Disable sound effects
+
+---
+
+## 🔊 How Sound Trigger Works
+
+The extension listens for terminal commands inside VS Code.
+
+When it detects:
+
+```
+git push
+```
+
+It plays the selected sound effect.
+
+---
+
+## 📁 Custom Sounds
+
+You can upload your own sounds:
+
+* Supported formats: `.mp3`, `.wav`, `.m4a`
+* Stored in VS Code global extension storage
+
+Access folder via:
+
+```
+Push Tags → Open Custom Sounds Folder
+```
+
+---
+
+## ⚙️ Requirements
+
+* VS Code `^1.116.0` or higher
+* Git installed on system
+* Terminal usage inside VS Code
+
+---
+
+## 🧠 Notes
+
+* Only detects Git commands run inside VS Code terminal
+* Does NOT detect external Git clients (GitHub Desktop, CLI outside VS Code)
+* Sound playback depends on OS:
+
+  * macOS → `afplay`
+  * Windows → PowerShell SoundPlayer
+  * Linux → `ffplay`
+
+---
+
+## ⚠️ Known Limitations
+
+* Terminal-based detection only
+* Linux requires `ffmpeg` installed for sound playback
+* No background Git monitoring (yet)
+
+---
+
+## 🛠️ Future Improvements
+
+* Real Git API event detection (no terminal parsing)
+* Per-repo sound profiles
+* Smarter event filtering (push/pull/commit)
+* Faster audio playback engine
+
+---
+
+## 💡 Why this exists
+
+This extension is designed to make development feel more interactive and fun by adding audio feedback to Git actions.
+
+---
+
+*built with ❤️ by rishaan*
+**https://rishaan.cc**
+

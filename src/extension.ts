@@ -189,9 +189,9 @@ function playSound(context: vscode.ExtensionContext) {
 
 	let soundPath: string;
 
-	if (!selected || selected.type === 'disabled') {
-		return;
-	} else if (selected.type === 'custom') {
+	if (!selected || selected.type === 'disabled') return;
+
+	if (selected.type === 'custom') {
 		soundPath = path.join(
 			context.globalStorageUri.fsPath,
 			'custom',
@@ -206,13 +206,15 @@ function playSound(context: vscode.ExtensionContext) {
 		);
 	}
 
+	const safePath = soundPath.replace(/"/g, '\\"');
+
 	try {
 		if (process.platform === 'darwin') {
 			execFile('afplay', [soundPath]);
 		} else if (process.platform === 'win32') {
 			execFile('powershell', [
 				'-c',
-				`(New-Object Media.SoundPlayer "${soundPath}").PlaySync();`
+				`(New-Object Media.SoundPlayer "${safePath}").PlaySync();`
 			]);
 		} else {
 			execFile('ffplay', ['-nodisp', '-autoexit', soundPath]);

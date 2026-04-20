@@ -1,16 +1,18 @@
 {
   "name": "push-tags",
-  "displayName": "push-tags",
+  "displayName": "Push Tags",
+  "keywords": ["git", "sound", "terminal", "developer tools"],
   "publisher": "rishaan",
+  "icon": "images/logo.png",
   "repository": {
     "type": "git",
     "url": "https://github.com/RishaanJ/push-tags"
   },
   "license": "MIT",
   "description": "Add a custom sound effect whenever you push code, alerting everybody around you with your CUSTOM audio",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "engines": {
-    "vscode": "^1.107.0"
+    "vscode": "^1.116.0"
   },
   "categories": [
     "Other"
