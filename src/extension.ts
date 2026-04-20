@@ -4,6 +4,7 @@ import { exec } from 'child_process';
 
 export function activate(context: vscode.ExtensionContext) {
 	console.log('push-sound extension active');
+	console.log('EXTENSION ACTIVATED');
 
 	// listens to ANY terminal command execution
 	const terminalListener = vscode.window.onDidStartTerminalShellExecution?.(async (e) => {
