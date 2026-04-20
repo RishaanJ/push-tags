@@ -2,54 +2,32 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import { exec } from 'child_process';
 
-let lastHashes = new Map<string, string>();
-
 export function activate(context: vscode.ExtensionContext) {
 	console.log('push-sound extension active');
 
-	
-	const gitExtension = vscode.extensions.getExtension('vscode.git')?.exports;
-	const git = gitExtension?.getAPI(1);
+	// listens to ANY terminal command execution
+	const terminalListener = vscode.window.onDidStartTerminalShellExecution?.(async (e) => {
+		try {
+			const commandLine = e.execution?.commandLine?.value;
 
-	if (!git) {
-		console.log('Git API not found');
-		return;
+			if (!commandLine) return;
+
+			console.log('terminal command:', commandLine);
+
+			// detect git commit
+			if (commandLine.includes('git commit')) {
+				playSound(context);
+			}
+		} catch (err) {
+			console.error('terminal hook error:', err);
+		}
+	});
+
+	if (terminalListener) {
+		context.subscriptions.push(terminalListener);
+	} else {
+		console.log('Terminal shell execution API not available in this VS Code version');
 	}
-
-	// attach to existing repos
-	git.repositories.forEach((repo: any) => {
-		watchRepo(repo, context);
-	});
-
-	// attach to newly opened repos
-	git.onDidOpenRepository((repo: any) => {
-		watchRepo(repo, context);
-	});
-}
-
-function watchRepo(repo: any, context: vscode.ExtensionContext) {
-	const id = repo.rootUri.toString();
-
-	repo.state.onDidChange(() => {
-		console.log('git change detected');
-		handleGitChange(repo, id, context);
-	});
-}
-
-function handleGitChange(repo: any, id: string, context: vscode.ExtensionContext) {
-	const head = repo.state.HEAD;
-
-	if (!head || !head.commit) return;
-
-	const newHash = head.commit;
-	const oldHash = lastHashes.get(id);
-
-	// if HEAD changed → likely commit/push/remote sync
-	if (oldHash && oldHash !== newHash) {
-		playSound(context);
-	}
-
-	lastHashes.set(id, newHash);
 }
 
 function playSound(context: vscode.ExtensionContext) {
