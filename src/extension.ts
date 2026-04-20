@@ -30,6 +30,7 @@ function watchRepo(repo: any, context: vscode.ExtensionContext) {
 	const id = repo.rootUri.toString();
 
 	repo.state.onDidChange(() => {
+		console.log('git change detected');
 		handleGitChange(repo, id, context);
 	});
 }
