@@ -7,7 +7,7 @@
     "url": "https://github.com/RishaanJ/push-tags"
   },
   "license": "MIT",
-  "description": "Add a custom sound effect whenever you push code, alerting everybody around you with your custom audio",
+  "description": "Add a custom sound effect whenever you push code, alerting everybody around you with your CUSTOM audio",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.107.0"
