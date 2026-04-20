@@ -1,10 +1,16 @@
 {
   "name": "push-tags",
   "displayName": "push-tags",
+  "publisher": "rishaan",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/RishaanJ/push-tags"
+  },
+  "license": "MIT",
   "description": "Add a custom sound effect whenever you push code, alerting everybody around you with your custom audio",
   "version": "0.0.1",
   "engines": {
-    "vscode": "^1.109.0"
+    "vscode": "^1.107.0"
   },
   "categories": [
     "Other"
@@ -15,10 +21,6 @@
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
-      {
-        "command": "push-tags.helloWorld",
-        "title": "Hello wrld"
-      },
       {
         "command": "push-tags.selectSound",
         "title": "Select Push Sound"

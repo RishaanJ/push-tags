@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
-import { exec } from 'child_process';
+import { execFile } from 'child_process';
 
 const SOUND_KEY = 'pushTags.selectedSound';
 
@@ -101,7 +101,7 @@ export function activate(context: vscode.ExtensionContext) {
 		})
 	);
 
-	// terminal hook
+
 	const terminalListener =
 		vscode.window.onDidStartTerminalShellExecution?.((e) => {
 			const cmd = e.execution?.commandLine?.value;
@@ -115,7 +115,6 @@ export function activate(context: vscode.ExtensionContext) {
 	if (terminalListener) context.subscriptions.push(terminalListener);
 }
 
-/* ---------------- SOUND LIST ---------------- */
 
 async function getAllSounds(context: vscode.ExtensionContext): Promise<SoundItem[]> {
 	const defaultDir = path.join(context.extensionPath, 'media', 'default');
@@ -144,7 +143,7 @@ async function getAllSounds(context: vscode.ExtensionContext): Promise<SoundItem
 	return [...defaultSounds, ...customSounds];
 }
 
-/* ---------------- UPLOAD ---------------- */
+
 
 async function handleUpload(context: vscode.ExtensionContext) {
 	const files = await vscode.window.showOpenDialog({
@@ -169,24 +168,24 @@ async function handleUpload(context: vscode.ExtensionContext) {
 	vscode.window.showInformationMessage('Custom sound added!');
 }
 
-/* ---------------- OPEN FOLDER ---------------- */
+
 
 function openFolder(context: vscode.ExtensionContext) {
 	const folder = path.join(context.globalStorageUri.fsPath, 'custom');
 
 	if (process.platform === 'darwin') {
-		exec(`open "${folder}"`);
+		execFile('open', [folder]);
 	} else if (process.platform === 'win32') {
-		exec(`explorer "${folder}"`);
+		execFile('explorer.exe', [folder]);
 	} else {
-		exec(`xdg-open "${folder}"`);
+		execFile('xdg-open', [folder]);
 	}
 }
 
-/* ---------------- PLAY SOUND ---------------- */
+
 
 function playSound(context: vscode.ExtensionContext) {
-	const selected = context.globalState.get<any>(SOUND_KEY);
+	const selected = context.globalState.get<SoundState>(SOUND_KEY);
 
 	let soundPath: string;
 
@@ -209,13 +208,14 @@ function playSound(context: vscode.ExtensionContext) {
 
 	try {
 		if (process.platform === 'darwin') {
-			exec(`afplay "${soundPath}"`);
+			execFile('afplay', [soundPath]);
 		} else if (process.platform === 'win32') {
-			exec(
-				`powershell -c (New-Object Media.SoundPlayer "${soundPath}").PlaySync();`
-			);
+			execFile('powershell', [
+				'-c',
+				`(New-Object Media.SoundPlayer "${soundPath}").PlaySync();`
+			]);
 		} else {
-			exec(`ffplay -nodisp -autoexit "${soundPath}"`);
+			execFile('ffplay', ['-nodisp', '-autoexit', soundPath]);
 		}
 	} catch (err) {
 		console.error('sound failed:', err);
