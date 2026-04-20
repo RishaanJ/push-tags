@@ -1,7 +1,7 @@
 {
   "name": "push-tags",
   "displayName": "push-tags",
-  "description": "Add a custom sound effect whenever you push code, alerting everybody around you with your custom audio",
+  "description": "Add a custom sound effect whenever you push code, alerting everybody around you with your custom audio, or some of our presets",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.109.0"
