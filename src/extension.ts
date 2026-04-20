@@ -11,6 +11,10 @@ type SoundItem = {
 	file: string;
 };
 
+type SoundState =
+	| { type: 'disabled' }
+	| { type: 'default' | 'custom'; file: string };
+
 type PickerItem =
 	| {
 			label: string;
@@ -24,6 +28,10 @@ type PickerItem =
 	| {
 			label: string;
 			type: 'folder';
+	  }
+	| {
+			label: string;
+			type: 'disable';
 	  };
 
 export function activate(context: vscode.ExtensionContext) {
@@ -38,7 +46,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 			const items: PickerItem[] = [
 				...sounds.map(s => ({
-					label: s.type === 'custom' ? `📁 ${s.label}` : `🎵 ${s.label}`,
+					label: s.type === 'custom' ? `🔉 ${s.label}` : `🎵 ${s.label}`,
 					type: 'sound' as const,
 					sound: s
 				})),
@@ -51,6 +59,10 @@ export function activate(context: vscode.ExtensionContext) {
 				{
 					label: '📁 Open Custom Sounds Folder',
 					type: 'folder' as const
+				},
+				{
+					label: '🚫 Disable Sound',
+					type: 'disable' as const
 				}
 			];
 
@@ -78,6 +90,12 @@ export function activate(context: vscode.ExtensionContext) {
 					vscode.window.showInformationMessage(
 						`Sound set to ${pick.sound.label}`
 					);
+					return;
+				case 'disable':
+					await context.globalState.update(SOUND_KEY, {
+						type: 'disabled'
+					});
+					vscode.window.showInformationMessage(`Sound disabled`);
 					return;
 			}
 		})
@@ -172,13 +190,8 @@ function playSound(context: vscode.ExtensionContext) {
 
 	let soundPath: string;
 
-	if (!selected) {
-		soundPath = path.join(
-			context.extensionPath,
-			'media',
-			'default',
-			'ok.mp3'
-		);
+	if (!selected || selected.type === 'disabled') {
+		return;
 	} else if (selected.type === 'custom') {
 		soundPath = path.join(
 			context.globalStorageUri.fsPath,
