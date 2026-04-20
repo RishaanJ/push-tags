@@ -28,6 +28,7 @@ export function activate(context: vscode.ExtensionContext) {
 			vscode.window.showInformationMessage(`Sound set to ${choice}`);
 		})
 	);
+	console.log("some bs");
 
 	const terminalListener = vscode.window.onDidStartTerminalShellExecution?.(async (e) => {
 		try {
