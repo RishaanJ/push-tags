@@ -18,6 +18,10 @@
       {
         "command": "push-tags.helloWorld",
         "title": "Hello wrld"
+      },
+      {
+        "command": "push-tags.selectSound",
+        "title": "Select Push Sound"
       }
     ]
   },

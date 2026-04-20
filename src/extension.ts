@@ -2,21 +2,41 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import { exec } from 'child_process';
 
+const SOUND_KEY = 'pushTags.selectedSound';
+
 export function activate(context: vscode.ExtensionContext) {
 	console.log('push-sound extension active');
 	console.log('EXTENSION ACTIVATED');
 
-	// listens to ANY terminal command execution
+	// register command to choose sound
+	context.subscriptions.push(
+		vscode.commands.registerCommand('push-tags.selectSound', async () => {
+			const options = [
+				'Maybach.mp3',
+				'Pierre.mp3',
+				'Ok.mp3'
+			];
+
+			const choice = await vscode.window.showQuickPick(options, {
+				placeHolder: 'Pick your commit sound'
+			});
+
+			if (!choice) return;
+
+			await context.globalState.update(SOUND_KEY, choice);
+
+			vscode.window.showInformationMessage(`Sound set to ${choice}`);
+		})
+	);
+
 	const terminalListener = vscode.window.onDidStartTerminalShellExecution?.(async (e) => {
 		try {
 			const commandLine = e.execution?.commandLine?.value;
-
 			if (!commandLine) return;
 
 			console.log('terminal command:', commandLine);
 
-			// detect git commit
-			if (commandLine.includes('git commit')) {
+			if (commandLine.includes('git push')) {
 				playSound(context);
 			}
 		} catch (err) {
@@ -26,21 +46,19 @@ export function activate(context: vscode.ExtensionContext) {
 
 	if (terminalListener) {
 		context.subscriptions.push(terminalListener);
-	} else {
-		console.log('Terminal shell execution API not available in this VS Code version');
 	}
 }
 
 function playSound(context: vscode.ExtensionContext) {
-	const soundPath = path.join(context.extensionPath, 'media', 'tagwmv.mp3');
+	const selected = context.globalState.get<string>('pushTags.selectedSound') || 'tagwmv.mp3';
 
-	const platform = process.platform;
+	const soundPath = path.join(context.extensionPath, 'media', selected);
 
 	try {
-		if (platform === 'darwin') {
+		if (process.platform === 'darwin') {
 			exec(`afplay "${soundPath}"`);
 		} 
-		else if (platform === 'win32') {
+		else if (process.platform === 'win32') {
 			exec(`powershell -c (New-Object Media.SoundPlayer "${soundPath}").PlaySync();`);
 		} 
 		else {
