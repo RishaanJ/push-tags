@@ -7,6 +7,7 @@ let lastHashes = new Map<string, string>();
 export function activate(context: vscode.ExtensionContext) {
 	console.log('push-sound extension active');
 
+	
 	const gitExtension = vscode.extensions.getExtension('vscode.git')?.exports;
 	const git = gitExtension?.getAPI(1);
 
