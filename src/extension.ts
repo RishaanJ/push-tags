@@ -4,9 +4,7 @@ import * as fs from 'fs';
 import { execFile } from 'child_process';
 
 const SOUND_KEY = 'pushTags.selectedSound';
-
 type SoundItem = {
-	
 	label: string;
 	type: 'default' | 'custom';
 	file: string;
